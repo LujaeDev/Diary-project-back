@@ -7,8 +7,12 @@ import com.example.pproject.repository.memberRepo.MemberRepository;
 import com.example.pproject.service.AccountService;
 import com.example.pproject.service.MemberService;
 import com.example.pproject.web.form.SignUpFormData;
+import com.example.pproject.web.response.Response;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
@@ -25,15 +29,23 @@ public class HelloWorldController {
         return "Hello1111";
     }
 
-    @PostMapping("api/signUp")
-    public Optional<Account> signUp(@RequestBody SignUpFormData formData){
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("api/signup")
+    public Response<?> signUp(@Valid @RequestBody SignUpFormData formData, BindingResult bindingResult) {
         log.info("{}", formData);
+
+        if (bindingResult.hasErrors()) {
+            log.info("bindingResult.hasErrors() = {}", bindingResult);
+
+            return new Response<>("false", "failed to sign up", null);
+        }
 
         Optional<Account> optional = processSignUp(formData);
 
         log.info("optional = {}", optional);
-        return optional;
+        return new Response<>("true", "success to sign up", optional.get());
     }
+
 
     private Optional<Account> processSignUp(SignUpFormData formData){
         Member member = new Member(formData);

@@ -1,6 +1,5 @@
 package com.example.pproject.config;
 
-import com.example.pproject.dao.MemberDao;
 import com.zaxxer.hikari.HikariDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
