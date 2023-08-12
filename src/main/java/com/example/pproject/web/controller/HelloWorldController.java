@@ -1,11 +1,13 @@
 package com.example.pproject.web.controller;
 
+import com.example.pproject.config.jwt.TokenInfo;
 import com.example.pproject.domain.Account;
 import com.example.pproject.domain.Member;
 import com.example.pproject.repository.AccountDto;
 import com.example.pproject.repository.memberRepo.MemberRepository;
 import com.example.pproject.service.AccountService;
 import com.example.pproject.service.MemberService;
+import com.example.pproject.web.form.SignInFormData;
 import com.example.pproject.web.form.SignUpFormData;
 import com.example.pproject.web.response.Response;
 import jakarta.validation.Valid;
@@ -29,8 +31,7 @@ public class HelloWorldController {
         return "Hello1111";
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("api/signup")
+    @PostMapping("api/signUp")
     public Response<?> signUp(@Valid @RequestBody SignUpFormData formData, BindingResult bindingResult) {
         log.info("{}", formData);
 
@@ -44,6 +45,18 @@ public class HelloWorldController {
 
         log.info("optional = {}", optional);
         return new Response<>("true", "success to sign up", optional.get());
+    }
+
+    @PostMapping("/api/signIn")
+    public Response<?> signIn(@RequestBody SignInFormData formData) {
+        log.info("start sign in");
+
+        String memberId = formData.getEmail();
+        String password = formData.getPassword();
+
+
+        TokenInfo tokenInfo = accountService.login(memberId, password);
+        return new Response<>("true", "success to sign in", tokenInfo);
     }
 
 

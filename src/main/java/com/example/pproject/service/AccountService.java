@@ -1,9 +1,15 @@
 package com.example.pproject.service;
 
+import com.example.pproject.config.jwt.JwtTokenProvider;
+import com.example.pproject.config.jwt.TokenInfo;
 import com.example.pproject.domain.Account;
 import com.example.pproject.repository.AccountDto;
 import com.example.pproject.repository.accountRepo.AccountRepositoryV1;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,7 +22,8 @@ import java.util.Optional;
 public class AccountService {
     private final AccountRepositoryV1 accountRepository;
     private final PasswordEncoder passwordEncoder;
-
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final JwtTokenProvider jwtTokenProvider;
 //    public Account save(Account account) {
 //        return accountRepository.save(account);
 //    }
@@ -56,5 +63,18 @@ public class AccountService {
 
             return Optional.of(account);
         }
+    }
+
+    @Transactional
+    public TokenInfo login(String email, String password) {
+        // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
+        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
+
+        // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행
+        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+        TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
+        return tokenInfo;
     }
 }
