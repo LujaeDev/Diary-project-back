@@ -15,11 +15,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+//사용 안하는 클래스
 public class MemberRepositoryV1 implements MemberRepository {
 
     private final JdbcTemplate jdbcTemplate;
-    @Autowired
+    //@Autowired
     public MemberRepositoryV1(DataSource dataSource){
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
@@ -46,7 +46,7 @@ public class MemberRepositoryV1 implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> findByMemberId(Long memberId){
+    public Optional<Member> findById(Long memberId){
         List<Member> results = jdbcTemplate.query(
                 "select * from MEMBER WHERE member_id = ?",
                 new MemberRowMapper(),
@@ -74,16 +74,16 @@ public class MemberRepositoryV1 implements MemberRepository {
         return results;
     }
 
-    @Override
-    public Member update(Long memberId, MemberDto dto){
-        jdbcTemplate.update(
-                "UPDATE member SET first_name = ?, last_name = ? WHERE member_id = ?",
-                dto.getFirstName(),
-                dto.getLastName(),
-                memberId);
-
-        return findByMemberId(memberId).get();
-    }
+//    @Override
+//    public Member update(Long memberId, MemberDto dto){
+//        jdbcTemplate.update(
+//                "UPDATE member SET first_name = ?, last_name = ? WHERE member_id = ?",
+//                dto.getFirstName(),
+//                dto.getLastName(),
+//                memberId);
+//
+//        return findById(memberId).get();
+//    }
 
 /*    public void delete(){
         jdbcTemplate.update("TRUNCATE member");

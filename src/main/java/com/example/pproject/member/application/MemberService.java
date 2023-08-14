@@ -18,12 +18,9 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public void update(Long memberId, MemberDto updateParam) {
-        memberRepository.update(memberId, updateParam);
-    }
 
     public Optional<Member> findById(Long memberId) {
-        return memberRepository.findByMemberId(memberId);
+        return memberRepository.findById(memberId);
     }
 
     public List<Member> findAllMembers() {
