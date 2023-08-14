@@ -1,10 +1,10 @@
 package com.example.pproject.account.application;
 
+import com.example.pproject.account.domain.AccountRepository;
 import com.example.pproject.auth.applicatoin.JwtTokenProvider;
 import com.example.pproject.auth.domain.TokenInfo;
 import com.example.pproject.account.domain.Account;
 import com.example.pproject.account.dto.AccountDto;
-import com.example.pproject.account.domain.AccountRepositoryV1;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,8 +18,9 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AccountService {
-    private final AccountRepositoryV1 accountRepository;
+    private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final JwtTokenProvider jwtTokenProvider;
@@ -27,10 +28,7 @@ public class AccountService {
 //        return accountRepository.save(account);
 //    }
 
-    public void update(Long AccountId, AccountDto updateParam) {
-        //업데이트 할 때도 패스워드 암호화 필요 => BCrypt 사용
-        accountRepository.update(AccountId, updateParam);
-    }
+
 
     public Optional<Account> findById(Long id) {
         return accountRepository.findById(id);
@@ -50,6 +48,8 @@ public class AccountService {
         if(!foundEmail.isEmpty())
             return Optional.empty();
         else{
+            accountDto.setPassword(passwordEncoder.encode(accountDto.getPassword()));
+
             Account account = new Account(
                     accountDto.getEmail(),
                     accountDto.getPassword(),
@@ -57,14 +57,12 @@ public class AccountService {
             );
 
             //암호화
-            account.setPassword(passwordEncoder.encode(accountDto.getPassword()));
             accountRepository.save(account);
 
             return Optional.of(account);
         }
     }
 
-    @Transactional
     public TokenInfo login(String email, String password) {
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
         // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
