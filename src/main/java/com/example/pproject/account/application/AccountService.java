@@ -3,7 +3,7 @@ package com.example.pproject.account.application;
 import com.example.pproject.auth.applicatoin.JwtTokenProvider;
 import com.example.pproject.auth.domain.TokenInfo;
 import com.example.pproject.account.domain.Account;
-import com.example.pproject.auth.dto.AccountDto;
+import com.example.pproject.account.dto.AccountDto;
 import com.example.pproject.account.domain.AccountRepositoryV1;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

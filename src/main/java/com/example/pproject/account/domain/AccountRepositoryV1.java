@@ -1,6 +1,6 @@
 package com.example.pproject.account.domain;
 
-import com.example.pproject.auth.dto.AccountDto;
+import com.example.pproject.account.dto.AccountDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

@@ -3,7 +3,7 @@ package com.example.pproject.global.controller;
 import com.example.pproject.auth.domain.TokenInfo;
 import com.example.pproject.account.domain.Account;
 import com.example.pproject.member.domain.Member;
-import com.example.pproject.auth.dto.AccountDto;
+import com.example.pproject.account.dto.AccountDto;
 import com.example.pproject.account.application.AccountService;
 import com.example.pproject.member.application.MemberService;
 import com.example.pproject.auth.dto.SignInFormData;

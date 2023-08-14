@@ -1,5 +1,6 @@
-package com.example.pproject.auth.dto;
+package com.example.pproject.account.dto;
 
+import com.example.pproject.auth.dto.SignUpFormData;
 import lombok.Data;
 
 @Data
