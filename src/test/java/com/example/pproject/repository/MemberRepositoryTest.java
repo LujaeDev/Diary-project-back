@@ -1,7 +1,7 @@
 package com.example.pproject.repository;
 
-import com.example.pproject.domain.Member;
-import com.example.pproject.repository.memberRepo.MemberRepositoryV1;
+import com.example.pproject.member.domain.Member;
+import com.example.pproject.member.domain.MemberRepositoryV1;
 import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
