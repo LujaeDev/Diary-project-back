@@ -53,7 +53,8 @@ public class AccountService {
             Account account = new Account(
                     accountDto.getEmail(),
                     accountDto.getPassword(),
-                    accountDto.getMemberId()
+                    accountDto.getMemberId(),
+                    "USER"
             );
 
             //암호화
@@ -65,7 +66,7 @@ public class AccountService {
 
     public TokenInfo login(String email, String password) {
         // 1. Login ID/PW 를 기반으로 Authentication 객체 생성
-        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 false
+        // 이때 authentication 는 인증 여부를 확인하는 authenticated 값이 falseE
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(email, password);
 
         // authenticate 매서드가 실행될 때 CustomUserDetailsService 에서 만든 loadUserByUsername 메서드가 실행

@@ -9,12 +9,16 @@ import com.example.pproject.member.application.MemberService;
 import com.example.pproject.auth.dto.SignInFormData;
 import com.example.pproject.auth.dto.SignUpFormData;
 import com.example.pproject.global.response.Response;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Slf4j
@@ -45,19 +49,6 @@ public class HelloWorldController {
         return new Response<>("true", "success to sign up", optional.get());
     }
 
-    @PostMapping("/api/signIn")
-    public Response<?> signIn(@RequestBody SignInFormData formData) {
-        log.info("start sign in");
-
-        String memberId = formData.getEmail();
-        String password = formData.getPassword();
-
-
-        TokenInfo tokenInfo = accountService.login(memberId, password);
-        return new Response<>("true", "success to sign in", tokenInfo);
-    }
-
-
     private Optional<Account> processSignUp(SignUpFormData formData){
         Member member = new Member(formData);
         memberService.save(member);
@@ -69,4 +60,33 @@ public class HelloWorldController {
 
         return createdAccount;
     }
+    @PostMapping("/api/signIn")
+    public Response<?> signIn(@RequestBody SignInFormData formData) {
+        String email = formData.getEmail();
+        String password = formData.getPassword();
+
+        log.info("inner sign in: {}", formData);
+
+        TokenInfo tokenInfo = null;
+        boolean success = false;
+        String successOrFail = "Success";
+
+        try{
+            tokenInfo = accountService.login(email, password);
+            success = true;
+        } catch(Exception e){
+            log.info("exception = {}", e.toString());
+            successOrFail = "Fail";
+        } finally {
+            return new Response<>(String.valueOf(success),  successOrFail + " to sign in", tokenInfo);
+        }
+    }
+
+    @GetMapping("/api/main")
+    public void main(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        log.info("request: ", request);
+    }
+
+
+
 }
