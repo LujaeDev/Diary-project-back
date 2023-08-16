@@ -52,9 +52,6 @@ public class Account extends BaseEntity implements UserDetails{
         return Optional.of(new AccountDto(this.email, this.password, this.memberId));
     }
 
-    public void setRole(String role){
-        this.role = role;
-    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> authorities = new ArrayList<>();

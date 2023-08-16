@@ -48,6 +48,8 @@ public class AccountService {
         if(!foundEmail.isEmpty())
             return Optional.empty();
         else{
+
+            //암호화
             accountDto.setPassword(passwordEncoder.encode(accountDto.getPassword()));
 
             Account account = new Account(
@@ -57,7 +59,6 @@ public class AccountService {
                     "USER"
             );
 
-            //암호화
             accountRepository.save(account);
 
             return Optional.of(account);
