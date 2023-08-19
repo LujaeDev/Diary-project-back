@@ -76,4 +76,15 @@ public class AccountService {
         TokenInfo tokenInfo = jwtTokenProvider.generateToken(authentication);
         return tokenInfo;
     }
+
+    public Account extractAccount(String accessToken) {
+        Authentication authentication = jwtTokenProvider.getAuthentication(accessToken);
+        String email = authentication.getName();
+
+        accountRepository.validateExistsByEmail(email);
+        Optional<Account> account = accountRepository.findByEmail(email);
+
+
+        return account.get();
+    }
 }
