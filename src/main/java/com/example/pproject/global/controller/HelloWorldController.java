@@ -1,5 +1,6 @@
 package com.example.pproject.global.controller;
 
+import com.example.pproject.account.domain.AccountAdapter;
 import com.example.pproject.auth.domain.TokenInfo;
 import com.example.pproject.account.domain.Account;
 import com.example.pproject.member.domain.Member;
@@ -9,6 +10,8 @@ import com.example.pproject.member.application.MemberService;
 import com.example.pproject.auth.dto.SignInFormData;
 import com.example.pproject.auth.dto.SignUpFormData;
 import com.example.pproject.global.response.Response;
+import com.example.pproject.member.dto.response.ConverterMemberResponse;
+import com.example.pproject.member.dto.response.MemberResponse;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,6 +19,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +32,7 @@ import java.util.Optional;
 public class HelloWorldController {
     private final MemberService memberService;
     private final AccountService accountService;
+    private final ConverterMemberResponse converterMR;
 
     @GetMapping("/api/hello")
     public String test() {
@@ -45,6 +50,10 @@ public class HelloWorldController {
         }
 
         Optional<Account> optional = processSignUp(formData);
+
+        if(optional.equals(Optional.empty()))
+            return new Response<>("false", "The email is already registered", null);
+
         Account createdAccount = optional.get();
 
         log.info("createdAccount = {}", createdAccount);
@@ -59,8 +68,14 @@ public class HelloWorldController {
     }
 
     @GetMapping("/api/main")
-    public void mainPage(@RequestHeader("Authorization") String auth) {
-        log.info("{}", auth);
+    public Response<?> mainPage(@RequestHeader("Authorization") String auth, @AuthenticationPrincipal AccountDto accountDto) {
+        log.info("auth = {}", auth);
+        log.info("accountDto = {}", accountDto);
+
+        Optional<Member> member= memberService.findById(accountDto.getMemberId());
+        MemberResponse memberResponse = converterMR.makeMemberResponse(member.get());
+
+        return new Response<>("true", "success to load member data", memberResponse);
     }
 
     private Optional<Account> processSignUp(SignUpFormData formData){
