@@ -22,8 +22,8 @@ public class MemberResponse {
     private Long memberId;
     private String displayName;
     private String profileContent;
-    private List<String> positiveHabits;
-    private List<String> negativeHabits;
+    private List<Habit> positiveHabits;
+    private List<Habit> negativeHabits;
 
 
 }
