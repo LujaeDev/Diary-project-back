@@ -29,7 +29,7 @@ CREATE table springpdb.account(
 CREATE table springpdb.task(
 	task_id bigint auto_increment PRIMARY KEY,
     content varchar(100) NOT NULL,
-    success varchar(100) NOT NULL,
+    success boolean
     start_time time,
     end_time time,
     task_date date,
@@ -45,5 +45,7 @@ CREATE table springpdb.habit(
     #postive or negative
     habit_type varchar(10) NOT NULL,
     member_id bigint NOT NULL,
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     FOREIGN KEY(member_id) references springpdb.member(member_id)
 )
