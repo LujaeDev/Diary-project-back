@@ -6,10 +6,6 @@ import com.example.pproject.annualGoal.domain.AnnualGoal;
 import com.example.pproject.annualGoal.dto.request.AnnualGoalRequest;
 import com.example.pproject.annualGoal.dto.response.AnnualGoalResponse;
 import com.example.pproject.annualGoal.dto.response.AnnualGoalResponses;
-import com.example.pproject.task.domain.Task;
-import com.example.pproject.task.dto.request.TaskCreateRequest;
-import com.example.pproject.task.dto.response.TaskResponse;
-import com.example.pproject.task.dto.response.TaskResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +13,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -27,13 +22,23 @@ import java.util.List;
 public class AnnualGoalController {
     private final AnnualGoalService annualGoalService;
 
-    @GetMapping("")
+    @GetMapping("/{year}/{category}")
     ResponseEntity<AnnualGoalResponses> annualGoalList(@AuthenticationPrincipal AccountDto accountDto,
-                                                       @RequestParam Integer year,
-                                                       @RequestParam String category) {
+                                                       @PathVariable Integer year,
+                                                       @PathVariable String category) {
         Long memberId = accountDto.getMemberId();
 
         List<AnnualGoalResponse> listAnnualGoal = annualGoalService.findGoals(memberId, year, category);
+        AnnualGoalResponses response = new AnnualGoalResponses(listAnnualGoal);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{year}")
+    ResponseEntity<AnnualGoalResponses> annualGoalList(@AuthenticationPrincipal AccountDto accountDto,
+                                                       @PathVariable Integer year) {
+        Long memberId = accountDto.getMemberId();
+
+        List<AnnualGoalResponse> listAnnualGoal = annualGoalService.findGoals(memberId, year);
         AnnualGoalResponses response = new AnnualGoalResponses(listAnnualGoal);
         return ResponseEntity.ok(response);
     }
@@ -46,6 +51,12 @@ public class AnnualGoalController {
         //레퍼런스 코드
         //return ResponseEntity.created(URI.create("/api/categories/" + categoryResponse.getId())).body(categoryResponse);
         return ResponseEntity.created(URI.create("/api/tasks/" + response.getAnnualGoalId())).body(response);
+    }
+
+    @DeleteMapping("/{annualGoalId}")
+    public ResponseEntity<Void> annualGoalDelete(@AuthenticationPrincipal AccountDto accountDto, @PathVariable Long annualGoalId) {
+        annualGoalService.delete(annualGoalId);
+        return ResponseEntity.noContent().build();
     }
 
 
