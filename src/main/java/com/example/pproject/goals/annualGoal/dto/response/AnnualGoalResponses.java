@@ -1,6 +1,5 @@
-package com.example.pproject.annualGoal.dto.response;
+package com.example.pproject.goals.annualGoal.dto.response;
 
-import com.example.pproject.task.dto.response.TaskResponse;
 import lombok.Getter;
 
 import java.util.List;

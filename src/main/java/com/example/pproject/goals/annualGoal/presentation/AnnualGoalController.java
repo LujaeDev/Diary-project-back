@@ -1,11 +1,11 @@
-package com.example.pproject.annualGoal.presentation;
+package com.example.pproject.goals.annualGoal.presentation;
 
 import com.example.pproject.account.dto.AccountDto;
-import com.example.pproject.annualGoal.application.AnnualGoalService;
-import com.example.pproject.annualGoal.domain.AnnualGoal;
-import com.example.pproject.annualGoal.dto.request.AnnualGoalRequest;
-import com.example.pproject.annualGoal.dto.response.AnnualGoalResponse;
-import com.example.pproject.annualGoal.dto.response.AnnualGoalResponses;
+import com.example.pproject.goals.annualGoal.application.AnnualGoalService;
+import com.example.pproject.goals.annualGoal.domain.AnnualGoal;
+import com.example.pproject.goals.annualGoal.dto.request.AnnualGoalRequest;
+import com.example.pproject.goals.annualGoal.dto.response.AnnualGoalResponse;
+import com.example.pproject.goals.annualGoal.dto.response.AnnualGoalResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +50,7 @@ public class AnnualGoalController {
 
         //레퍼런스 코드
         //return ResponseEntity.created(URI.create("/api/categories/" + categoryResponse.getId())).body(categoryResponse);
-        return ResponseEntity.created(URI.create("/api/tasks/" + response.getAnnualGoalId())).body(response);
+        return ResponseEntity.created(URI.create("/api/annualGoals/" + response.getAnnualGoalId())).body(response);
     }
 
     @DeleteMapping("/{annualGoalId}")

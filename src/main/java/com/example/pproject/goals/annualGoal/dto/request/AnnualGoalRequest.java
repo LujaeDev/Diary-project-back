@@ -1,4 +1,4 @@
-package com.example.pproject.annualGoal.dto.request;
+package com.example.pproject.goals.annualGoal.dto.request;
 
 import lombok.Data;
 
