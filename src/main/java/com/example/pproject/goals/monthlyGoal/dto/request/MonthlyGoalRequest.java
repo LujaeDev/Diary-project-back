@@ -10,5 +10,6 @@ public class MonthlyGoalRequest {
     private Long parentGoalId;
     //year and month
     private LocalDate date;
+    private Boolean completed;
 }
 

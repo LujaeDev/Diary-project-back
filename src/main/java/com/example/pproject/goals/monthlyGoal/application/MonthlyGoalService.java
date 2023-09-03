@@ -3,6 +3,7 @@ package com.example.pproject.goals.monthlyGoal.application;
 import com.example.pproject.goals.monthlyGoal.domain.MonthlyGoal;
 import com.example.pproject.goals.monthlyGoal.domain.MonthlyGoalRepository;
 import com.example.pproject.goals.monthlyGoal.dto.request.MonthlyGoalRequest;
+import com.example.pproject.goals.monthlyGoal.dto.request.MonthlyGoalUpdateRequest;
 import com.example.pproject.goals.monthlyGoal.dto.response.MonthlyGoalResponse;
 import com.example.pproject.goals.monthlyGoal.dto.response.MonthlyGoalResponses;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,6 +37,13 @@ public class MonthlyGoalService {
 
     public void delete(Long monthlyGoalId) {
         repository.deleteById(monthlyGoalId);
+    }
+
+    public MonthlyGoalResponse update(Long monthlyGoalId, MonthlyGoalUpdateRequest request) {
+        MonthlyGoal saved = repository.findById(monthlyGoalId).get();
+        saved.setCompleted(request.getCompleted());
+
+        return new MonthlyGoalResponse(repository.save(saved));
     }
 
 }

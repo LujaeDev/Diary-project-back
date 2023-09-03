@@ -28,7 +28,14 @@ public class MonthlyGoal extends BaseEntity {
     @Column(nullable = false)
     private LocalDate date;
 
+    @Column(nullable = false)
+    private Boolean completed;
+
     public MonthlyGoal() {
+    }
+
+    public void setCompleted(Boolean completed) {
+        this.completed = completed;
     }
 
     public MonthlyGoal(Long memberId, MonthlyGoalRequest request) {
@@ -36,5 +43,6 @@ public class MonthlyGoal extends BaseEntity {
         parentGoalId = request.getParentGoalId();
         date = request.getDate();
         this.memberId = memberId;
+        completed = request.getCompleted();
     }
 }

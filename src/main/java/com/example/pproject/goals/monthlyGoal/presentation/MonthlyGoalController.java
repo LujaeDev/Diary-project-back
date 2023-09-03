@@ -4,6 +4,7 @@ import com.example.pproject.account.dto.AccountDto;
 import com.example.pproject.goals.monthlyGoal.application.MonthlyGoalService;
 import com.example.pproject.goals.monthlyGoal.domain.MonthlyGoal;
 import com.example.pproject.goals.monthlyGoal.dto.request.MonthlyGoalRequest;
+import com.example.pproject.goals.monthlyGoal.dto.request.MonthlyGoalUpdateRequest;
 import com.example.pproject.goals.monthlyGoal.dto.response.MonthlyGoalResponse;
 import com.example.pproject.goals.monthlyGoal.dto.response.MonthlyGoalResponses;
 import lombok.RequiredArgsConstructor;
@@ -50,4 +51,13 @@ public class MonthlyGoalController {
         service.delete(monthlyGoalId);
         return ResponseEntity.noContent().build();
     }
+
+    @PatchMapping("/{monthlyGoalId}/completed")
+    ResponseEntity<MonthlyGoalResponse> updateCompleted(@AuthenticationPrincipal AccountDto accountDto,
+                                                        @PathVariable Long monthlyGoalId,
+                                                        @RequestBody MonthlyGoalUpdateRequest request) {
+        MonthlyGoalResponse response = service.update(monthlyGoalId, request);
+        return ResponseEntity.ok(response);
+    }
+
 }
