@@ -1,11 +1,9 @@
-package com.example.pproject.annualGoal.domain;
+package com.example.pproject.goals.annualGoal.domain;
 
-import com.example.pproject.task.domain.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface AnnualGoalRepository extends JpaRepository<AnnualGoal, Long> {
@@ -14,4 +12,10 @@ public interface AnnualGoalRepository extends JpaRepository<AnnualGoal, Long> {
             @Param("memberId") Long memberId,
             @Param("year") int year,
             @Param("category") String category);
+
+    @Query("SELECT a FROM AnnualGoal a Where a.memberId = :memberId AND a.year=:year")
+    List<AnnualGoal> findAllByMemberIdAndYear(
+            @Param("memberId") Long memberId,
+            @Param("year") int year
+    );
 }

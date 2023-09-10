@@ -1,6 +1,6 @@
-package com.example.pproject.annualGoal.domain;
+package com.example.pproject.goals.annualGoal.domain;
 
-import com.example.pproject.annualGoal.dto.request.AnnualGoalRequest;
+import com.example.pproject.goals.annualGoal.dto.request.AnnualGoalRequest;
 import com.example.pproject.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

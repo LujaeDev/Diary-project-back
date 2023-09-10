@@ -1,6 +1,6 @@
-package com.example.pproject.annualGoal.dto.response;
+package com.example.pproject.goals.annualGoal.dto.response;
 
-import com.example.pproject.annualGoal.domain.AnnualGoal;
+import com.example.pproject.goals.annualGoal.domain.AnnualGoal;
 import lombok.Data;
 
 @Data
