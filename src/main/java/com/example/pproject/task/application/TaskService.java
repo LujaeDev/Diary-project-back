@@ -18,15 +18,19 @@ import java.util.stream.Collectors;
 public class TaskService {
     private final TaskRepository repository;
 
-    public  List<TaskResponse> findTasksWithMemberIdAndDate(Long id, LocalDate date) {
+    public List<TaskResponse> findTasksWithMemberIdAndDate(Long id, LocalDate date) {
         List<Task> ret = repository.findAllByMemberId(id, date);
 
-        return ret.stream().map((t)->new TaskResponse(t)).collect(Collectors.toList());
+        return ret.stream().map((t) -> new TaskResponse(t)).collect(Collectors.toList());
     }
 
-    public TaskResponse addTask(Task task){
+    public TaskResponse save(Task task) {
         Task save = repository.save(task);
         TaskResponse response = new TaskResponse(save);
         return response;
+    }
+
+    public void delete(Long taskId) {
+        repository.deleteById(taskId);
     }
 }

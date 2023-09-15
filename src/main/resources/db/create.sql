@@ -1,9 +1,11 @@
 use springpdb;
 
-drop table if exists springpdb.task;
-drop table if exists springpdb.account;
-drop table if exists springpdb.habit;
-drop table if exists springpdb.member;
+-- drop table if exists springpdb.task;
+-- drop table if exists springpdb.account;
+-- drop table if exists springpdb.habit;
+-- drop table if exists springpdb.annual_goal;
+-- drop table if exists springpdb.monthly_goal;
+-- drop table if exists springpdb.member;
 
 CREATE table springpdb.member(
 	member_id bigint auto_increment PRIMARY KEY,
@@ -29,7 +31,7 @@ CREATE table springpdb.account(
 CREATE table springpdb.task(
 	task_id bigint auto_increment PRIMARY KEY,
     content varchar(100) NOT NULL,
-    success boolean
+    success boolean,
     start_time time,
     end_time time,
     task_date date,
@@ -48,4 +50,39 @@ CREATE table springpdb.habit(
     created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
 	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
     FOREIGN KEY(member_id) references springpdb.member(member_id)
-)
+);
+
+CREATE table springpdb.annual_goal(
+	annual_goal_id bigint auto_increment PRIMARY KEY,
+    category varchar(100) NOT NULL,
+    content varchar(100) NOT NULL,
+    member_id bigint NOT NULL,
+    year int NOT NULL,
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    FOREIGN KEY(member_id) references springpdb.member(member_id)
+);
+
+CREATE table springpdb.monthly_goal(
+	monthly_goal_id bigint auto_increment PRIMARY KEY,
+    content varchar(100) NOT NULL,
+    member_id bigint NOT NULL,
+    date Date NOT NULL,
+    parent_goal_id bigint,
+    completed BOOLEAN default false, 
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    FOREIGN KEY(member_id) references springpdb.member(member_id),
+    FOREIGN KEY(parent_goal_id) references springpdb.annual_goal(annual_goal_id)
+);
+
+CREATE table springpdb.diary(
+	diary_id bigint auto_increment PRIMARY KEY,
+    title varchar(100) NOT NULL,
+    content varchar(3000) NOT NULL,
+    member_id bigint NOT NULL,
+    date Date NOT NULL,
+    created_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+	updated_at DATETIME(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6),
+    FOREIGN KEY(member_id) references springpdb.member(member_id)
+);

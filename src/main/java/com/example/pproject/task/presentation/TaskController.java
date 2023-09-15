@@ -22,12 +22,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TaskController {
     private final TaskService taskService;
+
     @GetMapping("")
-    ResponseEntity<TaskResponses> taskList(@AuthenticationPrincipal AccountDto accountDto, @RequestParam String date){
+    ResponseEntity<TaskResponses> taskList(@AuthenticationPrincipal AccountDto accountDto, @RequestParam String date) {
         Long memberId = accountDto.getMemberId();
 
 
-        log.info(date.toString());
+        log.info(date);
         LocalDate localDate = LocalDate.parse(date);
         List<TaskResponse> listTaskResponse = taskService.findTasksWithMemberIdAndDate(memberId, localDate);
         TaskResponses response = new TaskResponses(listTaskResponse);
@@ -35,14 +36,20 @@ public class TaskController {
     }
 
     @PostMapping()
-    ResponseEntity<TaskResponse>  taskAdd(@AuthenticationPrincipal AccountDto accountDto, @RequestBody TaskCreateRequest taskCreateRequest){
+    ResponseEntity<TaskResponse> taskAdd(@AuthenticationPrincipal AccountDto accountDto, @RequestBody TaskCreateRequest taskCreateRequest) {
         Task task = new Task(accountDto.getMemberId(), taskCreateRequest);
-        TaskResponse response = taskService.addTask(task);
+        TaskResponse response = taskService.save(task);
 
         log.info("TargetRequest: {}", taskCreateRequest);
         //레퍼런스 코드
         //return ResponseEntity.created(URI.create("/api/categories/" + categoryResponse.getId())).body(categoryResponse);
         return ResponseEntity.created(URI.create("/api/tasks/" + response.getTaskId())).body(response);
+    }
+
+    @DeleteMapping("/{taskId}")
+    public ResponseEntity<Void> taskDelete(@AuthenticationPrincipal AccountDto accountDto, @PathVariable Long taskId) {
+        taskService.delete(taskId);
+        return ResponseEntity.noContent().build();
     }
 
 }
