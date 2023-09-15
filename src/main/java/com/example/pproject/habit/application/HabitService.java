@@ -49,7 +49,7 @@ public class HabitService {
         return new HabitResponse(savedHabit);
     }
 
-    public void delete(Long taskId) {
-        repository.deleteById(taskId);
+    public void delete(Long habitId) {
+        repository.deleteById(habitId);
     }
 }
