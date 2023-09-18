@@ -51,7 +51,7 @@ public class HelloWorldController {
 
         Optional<Account> optional = processSignUp(formData);
 
-        if(optional.equals(Optional.empty()))
+        if (optional.equals(Optional.empty()))
             return new Response<>("false", "The email is already registered", null);
 
         Account createdAccount = optional.get();
@@ -68,17 +68,16 @@ public class HelloWorldController {
     }
 
     @GetMapping("/api/main")
-    public Response<?> mainPage(@RequestHeader("Authorization") String auth, @AuthenticationPrincipal AccountDto accountDto) {
-        log.info("auth = {}", auth);
+    public Response<?> mainPage(@AuthenticationPrincipal AccountDto accountDto) {
         log.info("accountDto = {}", accountDto);
 
-        Optional<Member> member= memberService.findById(accountDto.getMemberId());
+        Optional<Member> member = memberService.findById(accountDto.getMemberId());
         MemberResponse memberResponse = converterMR.makeMemberResponse(member.get());
 
         return new Response<>("true", "success to load member data", memberResponse);
     }
 
-    private Optional<Account> processSignUp(SignUpFormData formData){
+    private Optional<Account> processSignUp(SignUpFormData formData) {
         log.info("processSignUp start");
         Member member = new Member(formData);
         memberService.save(member);
@@ -93,19 +92,19 @@ public class HelloWorldController {
         return createdAccount;
     }
 
-    private Response<?> signInProcess(SignInFormData formData){
+    private Response<?> signInProcess(SignInFormData formData) {
         TokenInfo tokenInfo = null;
         boolean success = false;
         String successOrFail = "Success";
 
-        try{
+        try {
             tokenInfo = accountService.login(formData.getEmail(), formData.getPassword());
             success = true;
-        } catch(Exception e){
+        } catch (Exception e) {
             log.info("exception = {}", e.toString());
             successOrFail = "Fail";
         } finally {
-            return new Response<>(String.valueOf(success),  successOrFail + " to sign in", tokenInfo);
+            return new Response<>(String.valueOf(success), successOrFail + " to sign in", tokenInfo);
         }
     }
 }
